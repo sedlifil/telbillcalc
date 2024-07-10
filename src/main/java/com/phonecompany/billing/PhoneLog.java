@@ -1,6 +1,7 @@
 package com.phonecompany.billing;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -76,7 +77,7 @@ public class PhoneLog {
         priceSum = priceSum.add(BigDecimal.valueOf(restOfCallDurationMinutes * CHEAPER_TARIFF_PRICE));
 
 
-        return priceSum;
+        return priceSum.setScale(1, RoundingMode.DOWN);
     }
 
     public long getPhone() {
