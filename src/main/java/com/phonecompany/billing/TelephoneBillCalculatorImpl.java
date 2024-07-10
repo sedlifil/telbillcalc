@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 public class TelephoneBillCalculatorImpl implements TelephoneBillCalculator{
 
-    //private Map<S> map = new HashMap();
     @Override
     public BigDecimal calculate(String phoneLog) {
         List<String> phoneStringLogs = new ArrayList<>(Arrays.asList(phoneLog.split("\n")));
@@ -32,10 +31,16 @@ public class TelephoneBillCalculatorImpl implements TelephoneBillCalculator{
              sumOfCalls = sumOfCalls.add(sum);
         }
 
-        phoneLogs.forEach(System.out::println);
     return sumOfCalls;
     }
 
+    /**
+     * Method to retrieve phone number with most calls
+     * if there are more phone numbers with same count of call,
+     *  it will pick the one with higher arithmetic higher value
+     * @param phoneLogsMap map with key of phone number and list of PhoneLogs
+     * @return phone number with most calls
+     */
     private long getMostCalledPhone(Map<Long, List<PhoneLog>> phoneLogsMap){
         long mostCalledPhone = 0;
         int calledCount = 0;

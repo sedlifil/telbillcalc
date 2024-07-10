@@ -7,13 +7,13 @@ import java.time.temporal.ChronoUnit;
 
 public class PhoneLog {
     private final long phone;
-    private final String startCallTimestamp;
-    private final String endCallTimestamp;
     private final LocalDateTime startCallDateTime;
     private final LocalDateTime endCallDateTime;
     private final long callDurationInSeconds;
     private final long callDurationInMinutes;
     private final BigDecimal calculatedCallPrince;
+
+    private final static String CALL_LOG_FORMAT = "dd-MM-yyyy HH:mm:ss";
 
     private final static int HOUR_TO_MINUTES = 60;
     private final static int EXPENSIVE_TARIFF_STARTING_POINT_IN_MIN = 8 * 60;
@@ -27,11 +27,8 @@ public class PhoneLog {
 
     public PhoneLog(long phone, String startCallTimestamp, String endCallTimestamp) {
         this.phone = phone;
-        this.startCallTimestamp = startCallTimestamp;
-        this.endCallTimestamp = endCallTimestamp;
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(CALL_LOG_FORMAT);
         startCallDateTime = LocalDateTime.parse(startCallTimestamp, formatter);
         endCallDateTime = LocalDateTime.parse(endCallTimestamp, formatter);
         callDurationInSeconds = callDurationInSeconds();
@@ -39,16 +36,29 @@ public class PhoneLog {
         calculatedCallPrince = calculateCallPrice();
     }
 
+    /**
+     * Method to return call duration in seconds
+     * @return call duration in seconds
+     */
     private long callDurationInSeconds(){
         return ChronoUnit.SECONDS.between(startCallDateTime, endCallDateTime);
     }
 
+    /**
+     * Method to return call duration in minutes rounded up
+     * E.g: if duration of call ended in 61 seconds, it will return 2
+     * @return call duration in minutes rounded up
+     */
     private long callDurationInMinutes(){
         if(callDurationInSeconds % HOUR_TO_MINUTES > 0)
             return callDurationInSeconds / HOUR_TO_MINUTES + 1;
         return callDurationInSeconds / HOUR_TO_MINUTES;
     }
 
+    /**
+     * Method to calculate price of the call
+     * @return price of the call
+     */
     public BigDecimal calculateCallPrice(){
         BigDecimal priceSum = new BigDecimal("0");
         int startingCallInMinutes = startCallDateTime.getHour() * HOUR_TO_MINUTES + startCallDateTime.getMinute();
@@ -71,14 +81,6 @@ public class PhoneLog {
 
     public long getPhone() {
         return phone;
-    }
-
-    public String getStartCallTimestamp() {
-        return startCallTimestamp;
-    }
-
-    public String getEndCallTimestamp() {
-        return endCallTimestamp;
     }
 
     @Override
